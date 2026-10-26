@@ -1,0 +1,4 @@
+﻿method,n_seeds,worst_group,mean_group,sample_acc,land bird / land bg,land bird / water bg,water bird / land bg,water bird / water bg
+ERM,3,68.07 ± 1.40,84.52 ± 1.45,86.14 ± 2.15,99.45 ± 0.23,75.39 ± 5.71,68.07 ± 1.40,95.17 ± 0.39
+Reweighting,3,85.25 ± 3.13,90.91 ± 0.84,92.23 ± 2.29,97.32 ± 1.31,89.25 ± 7.86,85.25 ± 3.13,91.80 ± 5.05
+GroupDRO,3,82.04 ± 11.70,90.11 ± 2.10,92.71 ± 2.08,97.63 ± 4.75,91.91 ± 8.86,82.04 ± 11.70,88.84 ± 11.57
