@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite the following paper:"
+authors:
+  - family-names: "Zarean"
+    given-names: "Kosar"
+title: "Spurious Correlations in Colored MNIST and Waterbirds: A Comprehensive Empirical Study"
+version: 1.0.0
+date-released: 2026-10-26
+url: "https://github.com/KosarZarean/spurious-correlations-colormnist-waterbirds"
+license: MIT
