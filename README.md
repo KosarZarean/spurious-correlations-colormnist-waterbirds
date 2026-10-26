@@ -1,58 +1,122 @@
-# spurious-correlations-colormnist-waterbirds
 # Spurious Correlations in Colored MNIST and Waterbirds
 
-**Author:** Kosar Zarean
+**A Comprehensive Empirical Study on Detecting and Mitigating Spurious Correlations in Image Classification**
 
-**Paper:** [تشخیص و کاهش همبستگی‌های کاذب در طبقه‌بندی تصاویر: یک مطالعه تجربی جامع روی Colored MNIST و Waterbirds]
+**نویسنده:** کوثر زارعان
 
----
+**مقاله:** تشخیص و کاهش همبستگی‌های کاذب در طبقه‌بندی تصاویر: یک مطالعه تجربی جامع روی Colored MNIST و Waterbirds
 
-## 📌 خلاصه
-
-این مخزن شامل کد، داده خام، و اسکریپت‌های بازتولید مقاله است. همه اعداد، جدول‌ها و شکل‌های مقاله از فایل‌های `results/*/results.json` (یا معادل آن‌ها) بازتولید می‌شوند.
-
-**⚠️ توجه مهم:** این مقاله یک **مطالعه تجربی** است، نه معرفی روش جدید. سهم آن مقایسه نظام‌مند پنج روش کاهش سوگیری در طیف کامل ρ و دو طراحی Colored MNIST است.
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-red.svg)](https://pytorch.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
-## 📓 نگاشت نوت‌بوک‌ها به جدول‌های مقاله
+##  خلاصه
 
-هر جدول/شکل مقاله از یک نوت‌بوک مشخص (و خروجی JSON آن) بازتولید می‌شود. جدول زیر این نگاشت را نشان می‌دهد:
+این مخزن شامل کد، داده خام، و اسکریپت‌های بازتولید مقاله است. همه اعداد، جدول‌ها و شکل‌های مقاله از فایل‌های `results/*/results.json` بازتولید می‌شوند.
+
+** توجه:** این مقاله یک **مطالعه تجربی** است، نه معرفی روش جدید. سهم آن مقایسه نظام‌مند پنج روش کاهش سوگیری در طیف ρ و دو طراحی Colored MNIST است.
+
+---
+
+##  ساختار مخزن
+
+```
+spurious-correlations-colormnist-waterbirds/
+├── README.md                          # این فایل
+├── REPRODUCIBILITY_REPORT.md          # نگاشت مقاله → JSON → نوت‌بوک
+├── CITATION.cff
+├── LICENSE
+├── .gitignore
+├── requirements.txt
+│
+├── notebooks/                         # نوت‌بوک‌های Colab
+│   ├── README.md
+│   ├── colored_mnist_project.ipynb     (CNN3، ρ=0.9، ۳ seed)
+│   ├── colored_mnist_10colors.ipynb    (نسخه ۱۰ رنگ)
+│   ├── paper_experiments.ipynb         (جاروب ۵ seed)
+│   ├── colored_mnist_mlp_rho09.ipynb   (MLP، ρ=0.9)
+│   ├── colored_mnist_mlp_rho99.ipynb   (MLP، ρ=0.99)
+│   ├── colored_mnist_minimal.ipynb     (CNN1، ρ=0.9)
+│   ├── colored_mnist_light.ipynb       (CNN2، ρ=0.9)
+│   ├── colored_mnist_rho099.ipynb      (CNN3، ρ=0.99)
+│   └── waterbirds_experiment.ipynb     (Waterbirds)
+│
+├── results/                           # داده خام (JSON)
+│   ├── project_results/results.json             (CNN3، ρ=0.9)
+│   ├── results_10colors/results.json            (نسخه ۱۰ رنگ)
+│   ├── paper_results/results.json               (جاروب ۵ seed)
+│   ├── project_mlp_rho09/results.json           (MLP، ρ=0.9)
+│   ├── project_mlp_rho99/results.json           (MLP، ρ=0.99)
+│   ├── project_minimal_results/results.json     (CNN1، ρ=0.9)
+│   ├── project_light_results/results.json       (CNN2، ρ=0.9)
+│   ├── project_rho099_results/results.json      (CNN3، ρ=0.99)
+│   └── results_waterbirds/raw_results.json      (Waterbirds)
+│
+├── figures/                           # شکل‌های مقاله
+│   ├── fig0_dataset_samples.png
+│   ├── fig1_baseline_training_curves.png
+│   ├── fig3_saliency.png
+│   ├── fig4_gradcam.png
+│   ├── fig_acc_vs_rho.png
+│   ├── fig_drop_vs_rho.png
+│   ├── fig_dropout.png
+│   ├── fig_color_effect.png
+│   ├── fig_theory_check.png
+│   ├── fig_confusion_ood2.png
+│   ├── fig_integrated_gradients.png
+│   ├── fig5_methods_comparison.png
+│   └── fig6_training_dynamics.png
+│
+└── src/                               # کد بازتولید
+    ├── README.md
+    ├── reproduce_all_tables.py
+    ├── reproduce_table1b.py
+    ├── reproduce_table7.py
+    └── stats.py
+```
+
+---
+
+##  نگاشت نوت‌بوک‌ها به جدول‌های مقاله
 
 | # | نوت‌بوک | معماری / نسخه | خروجی JSON | جدول‌های مقاله | شکل‌های مقاله |
 |---|---|---|---|---|---|
-| ۱ | `پروژه_رنگی_mnist.ipynb` | **CNN3** (مقاله اصلی) | `results/raw_results_5seed.json` | **۲، ۳، ۴، ۵، ۶، ۷، ۸، ۱۱، ۱۴** | **۲، ۳، ۴، ۵، ۶، ۷، ۸، ۹، ۱۰، ۱۱، ۱۲، ۱۳** |
-| ۲ | `coloured_mnist_rho099 (1).ipynb` | **CNN3، ρ=0.99** | `results_rho099/results.json` | ۵ (ستون ρ=0.99) | — |
-| ۳ | `color_mnist_light.ipynb` | **CNN2** | `results_light/results.json` | ۵ (ستون CNN2) | — |
-| ۴ | `colorful_mnist_minimal.ipynb` | نسخه حداقلی | `results_minimal/results.json` | (مطالعه تکمیلی) | — |
-| ۵ | `coloured_mnist_mlp_rho09.ipynb` | **MLP، ρ=0.9** | `results_mlp_rho09/results.json` | ۵ (ستون MLP ρ=0.9) | — |
-| ۶ | `coloured_mnist_mlp_rho99.ipynb` | **MLP، ρ=0.99** | `results_mlp_rho99/results.json` | ۵ (ستون MLP ρ=0.99) | — |
-| ۷ | `colorful_mnist_10colors.ipynb` | **۱۰ رنگ** | `results_10color/results.json` | **۹، ۱۰، ۱۱** (نسخه ۱۰ رنگ) | — |
-| ۸ | `آزمایش‌های کاغذی.ipynb` | آزمایش‌های تکمیلی | `results_paper/results.json` | (مطالعه تکمیلی) | — |
-| ۹ | `پرندگان آبزی_آزمایش.ipynb` | **Waterbirds** | `results_waterbirds/waterbirds.json` | **۱۲** | — |
+| ۱ | `colored_mnist_project.ipynb` | **CNN3** (مقاله اصلی) | `results/project_results/results.json` | **۲، ۳، ۴، ۹، ۱۰** | **۲، ۳، ۴** |
+| ۲ | `colored_mnist_10colors.ipynb` | **نسخه ۱۰ رنگ** | `results/results_10colors/results.json` | **۱۳، ۱۵** | — |
+| ۳ | `paper_experiments.ipynb` | **MLP/CNN3، جاروب ۵ seed** | `results/paper_results/results.json` | **۵، ۶، ۷، ۸** | **۵، ۶، ۷، ۸، ۹، ۱۰، ۱۱** |
+| ۴ | `colored_mnist_mlp_rho09.ipynb` | **MLP، ρ=0.9** | `results/project_mlp_rho09/results.json` | ۱۱ (ستون MLP ρ=0.9) | — |
+| ۵ | `colored_mnist_mlp_rho99.ipynb` | **MLP، ρ=0.99** | `results/project_mlp_rho99/results.json` | ۱۱ (ستون MLP ρ=0.99) | — |
+| ۶ | `colored_mnist_minimal.ipynb` | **CNN1، ρ=0.9** | `results/project_minimal_results/results.json` | ۱۱ (ستون CNN1) | — |
+| ۷ | `colored_mnist_light.ipynb` | **CNN2، ρ=0.9** | `results/project_light_results/results.json` | ۱۱ (ستون CNN2) | — |
+| ۸ | `colored_mnist_rho099.ipynb` | **CNN3، ρ=0.99** | `results/project_rho099_results/results.json` | ۱۱ (ستون CNN3 ρ=0.99) | — |
+| ۹ | `waterbirds_experiment.ipynb` | **Waterbirds** | `results/results_waterbirds/raw_results.json` | **۱۲** | — |
 
 ### توضیح جدول‌ها
 
 | جدول | محتوا | نوت‌بوک منبع | اسکریپت بازتولید |
 |---|---|---|---|
-| جدول ۱-ب | توزیع رنگ/برچسب | `projeh_rangi_mnist.ipynb` | `src/reproduce_table1b.py` |
-| جدول ۲ | ارزیابی مدل پایه | `projeh_rangi_mnist.ipynb` | `src/reproduce_table5.py` (بخش Baseline) |
-| جدول ۳ | Counterfactual | `projeh_rangi_mnist.ipynb` | `src/reproduce_table6.py` |
-| جدول ۴ | Misspecification | `projeh_rangi_mnist.ipynb` | `src/reproduce_table6.py` |
-| جدول ۵ | دقت ID/OOD/شکاف | `projeh_rangi_mnist.ipynb` (CNN3) + `results_*` | `src/reproduce_table5.py` |
-| جدول ۶ | اثر Dropout | `projeh_rangi_mnist.ipynb` | `src/reproduce_table9.py` |
-| جدول ۷ | اتحاد و MAE | `projeh_rangi_mnist.ipynb` | `src/reproduce_table7.py` |
-| جدول ۸ | خطای هر رقم | `projeh_rangi_mnist.ipynb` | `src/reproduce_table5.py` (بخش conf) |
-| جدول ۹ | روش‌ها (۱۰ رنگ) | `colorful_mnist_10colors.ipynb` | `src/reproduce_table10_10color.py` |
-| جدول ۱۰ | پروفایل تکیه بر رنگ (دورنگ) | `projeh_rangi_mnist.ipynb` | `src/reproduce_table10.py` |
-| جدول ۱۱ | مقایسه روش‌ها | `projeh_rangi_mnist.ipynb` | `src/reproduce_table11.py` |
-| جدول ۱۲ | Waterbirds | `parandegan_abi.ipynb` | `src/reproduce_table12.py` |
-| جدول ۱۳ | مقایسه دو طراحی | (تلفیق ۹ و ۱۱) | `src/reproduce_table11.py` |
-| جدول ۱۴ | مقایسه با کارهای پیشین | (دستی) | (در مقاله ثابت) |
+| جدول ۱-ب | توزیع رنگ/برچسب | (از داده خام) | `src/reproduce_table1b.py` |
+| جدول ۲ | ارزیابی مدل پایه | `colored_mnist_project.ipynb` | `src/reproduce_all_tables.py` |
+| جدول ۳ | Counterfactual | `colored_mnist_project.ipynb` | `src/reproduce_all_tables.py` |
+| جدول ۴ | Misspecification | `colored_mnist_project.ipynb` | `src/reproduce_all_tables.py` |
+| جدول ۵ | دقت ID/OOD/شکاف | `paper_experiments.ipynb` (+ `project_*`) | `src/reproduce_all_tables.py` |
+| جدول ۶ | اثر Dropout | `paper_experiments.ipynb` | `src/reproduce_all_tables.py` |
+| جدول ۷ | اتحاد و MAE | `paper_experiments.ipynb` | `src/reproduce_table7.py` |
+| جدول ۸ | خطای هر رقم | `paper_experiments.ipynb` | `src/reproduce_all_tables.py` |
+| جدول ۹ | روش‌ها (دورنگ) | `colored_mnist_project.ipynb` | `src/reproduce_all_tables.py` |
+| جدول ۱۰ | پروفایل رنگ (دورنگ) | `colored_mnist_project.ipynb` | `src/reproduce_all_tables.py` |
+| جدول ۱۱ | مقایسه روش‌ها × معماری | (تلفیق ۶ نوت‌بوک) | `src/reproduce_all_tables.py` |
+| جدول ۱۲ | Waterbirds | `waterbirds_experiment.ipynb` | `src/reproduce_all_tables.py` |
+| جدول ۱۳ | روش‌ها (۱۰ رنگ) | `colored_mnist_10colors.ipynb` | `src/reproduce_all_tables.py` |
+| جدول ۱۴ | مقایسه دو طراحی | (تلفیق ۹ و ۱۳) | `src/reproduce_all_tables.py` |
+| جدول ۱۵ | پروفایل رنگ (۱۰ رنگ) | `colored_mnist_10colors.ipynb` | `src/reproduce_all_tables.py` |
+| جدول ۱۶ | مقایسه با کارهای پیشین | (دستی) | (در مقاله ثابت) |
 
 ---
 
-## 🚀 نصب و اجرا
+##  نصب و اجرا
 
 ### پیش‌نیازها
 
@@ -67,33 +131,29 @@ cd spurious-correlations-colormnist-waterbirds
 pip install -r requirements.txt
 ```
 
-### بازتولید همه جدول‌ها و شکل‌ها
+### بازتولید همه جدول‌ها
 
 ```bash
 python src/reproduce_all_tables.py
+python src/stats.py
+python src/reproduce_table1b.py
+python src/reproduce_table7.py
 ```
-
-خروجی‌ها در `results/` ذخیره می‌شوند:
-- `results/table*.csv` — جدول‌ها
-- `results/figures/*.png` — شکل‌ها
 
 ### بازتولید یک جدول خاص
 
 ```bash
-# جدول ۵ (مدل پایه)
-python src/reproduce_table5.py
+# جدول ۱-ب (توزیع رنگ/برچسب)
+python src/reproduce_table1b.py
 
 # جدول ۷ (اتحاد و MAE)
 python src/reproduce_table7.py
 
-# جدول ۱۱ (مقایسه روش‌ها)
-python src/reproduce_table11.py
+# p-value و Cohen's d (Waterbirds)
+python src/stats.py
 
-# جدول ۱۲ (Waterbirds)
-python src/reproduce_table12.py --results results_waterbirds/waterbirds.json
-
-# شکل‌ها
-python src/reproduce_figures.py
+# همه جدول‌های دیگر
+python src/reproduce_all_tables.py
 ```
 
 ### بازتولید از نوت‌بوک
@@ -102,33 +162,32 @@ python src/reproduce_figures.py
 
 1. هر نوت‌بوک را در Colab باز کن (Runtime → GPU)
 2. همه سلول‌ها را اجرا کن (Run all)
-3. فایل `results.json` (یا معادل آن) را در پوشه مربوطه ذخیره کن
+3. فایل `results.json` را در پوشه مربوطه ذخیره کن
 4. اسکریپت بازتولید را اجرا کن
 
 **زمان تقریبی اجرای کامل روی T4 GPU:** ۴۰–۶۰ دقیقه برای هر نوت‌بوک.
 
 ---
 
-## 📊 داده خام
+##  داده خام
 
-همه فایل‌های JSON خام در پوشه‌های `results*/` قرار دارند:
+همه فایل‌های JSON خام در پوشه‌های `results/*/` قرار دارند:
 
 | فایل | توضیح | تعداد seed |
 |---|---|---|
-| `results/raw_results_5seed.json` | نتایج CNN3 (مقاله اصلی) | ۵ |
-| `results/raw_results_3seed.json` | نتایج CNN3 (۳ seed) | ۳ |
-| `results_rho099/results.json` | CNN3 با ρ=0.99 | ۵ |
-| `results_light/results.json` | CNN2 | ۵ |
-| `results_mlp_rho09/results.json` | MLP با ρ=0.9 | ۵ |
-| `results_mlp_rho99/results.json` | MLP با ρ=0.99 | ۵ |
-| `results_10color/results.json` | نسخه ۱۰ رنگ | ۳ |
-| `results_waterbirds/waterbirds.json` | Waterbirds | ۳ |
-| `results_minimal/results.json` | نسخه حداقلی | ۳ |
-| `results_paper/results.json` | آزمایش‌های تکمیلی | متغیر |
+| `results/project_results/results.json` | CNN3، ρ=0.9 | ۳ |
+| `results/results_10colors/results.json` | نسخه ۱۰ رنگ | ۳ |
+| `results/paper_results/results.json` | جاروب MLP/CNN3 | ۵ |
+| `results/project_mlp_rho09/results.json` | MLP، ρ=0.9 | ۳ |
+| `results/project_mlp_rho99/results.json` | MLP، ρ=0.99 | ۳ |
+| `results/project_minimal_results/results.json` | CNN1، ρ=0.9 | ۳ |
+| `results/project_light_results/results.json` | CNN2، ρ=0.9 | ۳ |
+| `results/project_rho099_results/results.json` | CNN3، ρ=0.99 | ۳ |
+| `results/results_waterbirds/raw_results.json` | Waterbirds | ۳ |
 
 ### ساختار JSON
 
-کلیدها به شکل `"{arch}|{rho}|{dropout}|{seed}"` هستند:
+برای `paper_results/results.json`، کلیدها به شکل `"{arch}|{rho}|{dropout}|{seed}"` هستند:
 
 ```json
 {
@@ -142,9 +201,26 @@ python src/reproduce_figures.py
     "id_conflict": 0.9756,
     "swap_acc": 0.9746,
     "color_effect": 0.0139,
-    "conf_ood2": [[968, 0, 1, ...], ...]
+    "conf_ood2": [[968, 0, 1, "..."]]
+  }
+}
+```
+
+برای `project_results/results.json` و `results_10colors/results.json`، ساختار متفاوت است:
+
+```json
+{
+  "cfg": {},
+  "RES": {
+    "Baseline": {
+      "0": {"train": "...", "val": "...", "id": "...", "ood1": "...", "ood2": "..."}
+    }
   },
-  ...
+  "CUE": {
+    "Baseline": {
+      "0": {"original": {}, "A_swap": {}}
+    }
+  }
 }
 ```
 
@@ -152,54 +228,19 @@ python src/reproduce_figures.py
 
 ---
 
-## 📁 ساختار پروژه
-
-```
-spurious-correlations-colormnist-waterbirds/
-├── README.md                    # این فایل
-├── requirements.txt             # وابستگی‌ها
-├── REPRODUCIBILITY_REPORT.md    # گزارش بازتولید
-├── LICENSE                      # مجوز MIT
-│
-├── *.ipynb                      # نوت‌بوک‌های Colab
-│
-├── src/                         # کد بازتولید
-│   ├── data_loader.py           # لودر JSON
-│   ├── stats.py                 # آمار (holm، welch، mean_ci)
-│   ├── probes.py                # توابع تشخیص نشانه
-│   ├── data.py                  # ساخت داده (از نوت‌بوک)
-│   ├── models.py                # مدل‌ها (از نوت‌بوک)
-│   ├── reproduce_*.py           # اسکریپت‌های بازتولید
-│   └── reproduce_all_tables.py  # اجرای همه
-│
-├── results/                     # CNN3 (مقاله اصلی)
-├── results_light/               # CNN2
-├── results_10color/             # ۱۰ رنگ
-├── results_mlp_rho09/           # MLP ρ=0.9
-├── results_mlp_rho99/           # MLP ρ=0.99
-├── results_rho099/              # CNN3 ρ=0.99
-├── results_waterbirds/          # Waterbirds
-├── results_minimal/             # نسخه حداقلی
-├── results_paper/               # آزمایش‌های تکمیلی
-│
-└── models/                      # مدل‌های ذخیره‌شده (اختیاری)
-```
-
----
-
-## ⚠️ محدودیت‌ها و هشدارها
+##  محدودیت‌ها
 
 ### ۱. جدول ۱-ب (توزیع رنگ)
 
-فایل `raw_results_5seed.json` فقط دقت‌ها را دارد، نه تعداد نمونه‌ها. برای بازتولید کامل جدول ۱-ب، باید یا نوت‌بوک را دوباره اجرا کنی و تعدادها را ذخیره کنی، یا جدول ۱-ب را از مقاله حذف کنی.
+`src/reproduce_table1b.py` این جدول را از داده خام MNIST بازتولید می‌کند. **نیازی به اجرای مجدد نوت‌بوک نیست.**
 
-### ۲. جدول ۶ و ۱۰ (Counterfactual)
+### ۲. جدول ۳ و ۴ (Counterfactual و Misspecification)
 
-این جدول‌ها به مدل‌های آموزش‌دیده نیاز دارند (`models/*.pth`). اگر مدل‌ها ذخیره نشده‌اند، این جدول‌ها فقط با اجرای مجدد نوت‌بوک قابل بازتولید هستند.
+این جدول‌ها به مدل‌های آموزش‌دیده نیاز دارند. اگر مدل‌ها ذخیره نشده‌اند (`models/*.pth` در `.gitignore` است)، این جدول‌ها فقط با اجرای مجدد نوت‌بوک قابل بازتولید هستند. **پیشنهاد:** مدل‌ها را در GitHub Release آپلود کن، نه در git.
 
 ### ۳. تعداد seed
 
-- CNN3، CNN2، MLP، Waterbirds: ۵ seed (یا ۳ برای مقایسه روش‌ها)
+- CNN3، CNN2، MLP، Waterbirds: ۳ یا ۵ seed (بسته به فایل)
 - ۱۰ رنگ: ۳ seed
 
 با n=۳ (یا ۵)، توان آزمون‌های آماری پایین است. نتایج به‌عنوان **شواهد اولیه** گزارش می‌شوند، نه اثبات قطعی.
@@ -214,40 +255,47 @@ spurious-correlations-colormnist-waterbirds/
 
 ---
 
-## 🔧 وابستگی‌ها
+##  وابستگی‌ها
 
 `requirements.txt`:
 
 ```
 torch>=2.0.0
+torchvision>=0.15.0
 numpy>=1.24.0
 pandas>=2.0.0
 scipy>=1.10.0
 matplotlib>=3.7.0
 scikit-learn>=1.2.0
+jupyter>=1.0.0
 ```
 
 ---
 
-## 📖 ارجاع
+##  ارجاع
 
 اگر از این کد یا داده استفاده می‌کنی، لطفاً به مقاله ارجاع بده:
 
-```
-Zarean, K. (2025). Spurious Correlations in Colored MNIST and Waterbirds:
-A Comprehensive Experimental Study. [Journal/Conference].
+```bibtex
+@article{zarean2026spurious,
+  title   = {Spurious Correlations in Colored MNIST and Waterbirds:
+             A Comprehensive Empirical Study},
+  author  = {Zarean, Kosar},
+  year    = {2026},
+  url     = {https://github.com/KosarZarean/spurious-correlations-colormnist-waterbirds}
+}
 ```
 
 ---
 
-## 📧 تماس
+##  تماس
 
-برای سوال یا گزارش مشکل، از طریق GitHub Issues یا ایمیل:
+برای سوال یا گزارش مشکل، از طریق GitHub Issues:
 
-**[your-email@example.com]**
+https://github.com/KosarZarean/spurious-correlations-colormnist-waterbirds/issues
 
 ---
 
-## 📜 مجوز
+##  مجوز
 
-MIT License — see `LICENSE` file.
+MIT License — see [`LICENSE`](LICENSE).
